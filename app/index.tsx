@@ -1,15 +1,18 @@
-import { Text, View } from "react-native";
+// app/index.tsx
+import { useEffect } from 'react';
+import { useRouter, useNavigationContainerRef } from 'expo-router';
+import { View } from 'react-native';
 
 export default function Index() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
-  );
+    const router = useRouter();
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            router.replace('/search');
+        }, 0); // defer until after layout is mounted
+
+        return () => clearTimeout(timeout);
+    }, []);
+
+    return <View />; // optional: splash/loading
 }
