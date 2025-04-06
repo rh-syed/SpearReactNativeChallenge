@@ -15,3 +15,25 @@ export const getUserByUsername = async (username: string) : Promise<User | null>
         throw error;
     }
 };
+
+
+export const getFollowers = async (username: string): Promise<User[]> => {
+    try {
+        const response = await axios.get(`${BASE_URL}/users/${username}/followers`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch followers:', error);
+        return [];
+    }
+};
+
+
+export const getFollowing = async (username: string): Promise<User[]> => {
+    try {
+        const response = await axios.get(`${BASE_URL}/users/${username}/following`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch following:', error);
+        return [];
+    }
+};
