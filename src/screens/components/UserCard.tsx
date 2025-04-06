@@ -1,6 +1,6 @@
-// src/views/components/UserCard.tsx
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 import { User } from '@/src/models/User';
 
 interface UserCardProps {
@@ -8,16 +8,31 @@ interface UserCardProps {
 }
 
 export default function UserCard({ user }: UserCardProps) {
+    const router = useRouter();
+
+    const goToProfile = () => {
+        router.push({
+            pathname: '/profile/[username]',
+            params: {
+                username: user.login,
+                user: JSON.stringify(user),
+            },
+        });
+    };
+
     return (
-        <View style={styles.card}>
+        <Pressable onPress={goToProfile} style={styles.card}>
             <Image source={{ uri: user.avatar_url }} style={styles.avatar} />
             <Text style={styles.username}>{user.login}</Text>
             <Text style={styles.name}>{user.name}</Text>
             <Text style={styles.bio}>{user.bio}</Text>
-            <Text style={styles.stats}>
-                {user.followers} followers • {user.following} following
-            </Text>
-        </View>
+
+            <View style={styles.statsRow}>
+                <Text style={styles.stats}>{user.followers} followers</Text>
+                <Text style={styles.dot}>•</Text>
+                <Text style={styles.stats}>{user.following} following</Text>
+            </View>
+        </Pressable>
     );
 }
 
@@ -34,6 +49,7 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 4,
         alignItems: 'center',
+        marginBottom: 16,
     },
     avatar: {
         width: 96,
@@ -55,9 +71,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 8,
     },
+    statsRow: {
+        flexDirection: 'row',
+        gap: 8,
+        marginTop: 8,
+        alignItems: 'center',
+    },
     stats: {
         fontSize: 14,
         color: '#333',
-        marginTop: 8,
+    },
+    dot: {
+        color: '#999',
+        marginHorizontal: 6,
     },
 });
